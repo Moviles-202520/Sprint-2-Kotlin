@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    kotlin("plugin.serialization") version "2.2.0"
 }
 
 android {
@@ -40,6 +42,17 @@ android {
 }
 
 dependencies {
+    //dependencies for Supabase... check https://github.com/supabase-community/supabase-kt for latest versions
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.4")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.4")
+    implementation("io.github.jan-tennert.supabase:storage-kt:3.2.4")
+    implementation("io.ktor:ktor-client-android:3.2.2")
+
+    //dependency for serialization, to transform Supabase data into serialized objects
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+
+    //dependency for managing timestamptz and Instant
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
