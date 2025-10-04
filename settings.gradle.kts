@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PuntoNeutroKotlin"
+rootProject.name = "Sprint-2-Kotlin"
 include(":app")
  
