@@ -1,6 +1,6 @@
 package com.example.sprint_2_kotlin.model.repository
 
-import com.example.sprint_2_kotlin.NewsItem
+import com.example.sprint_2_kotlin.model.data.NewsItem
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
