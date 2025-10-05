@@ -1,0 +1,130 @@
+package com.example.sprint_2_kotlin.view
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import com.example.sprint_2_kotlin.model.data.NewsItem
+import com.example.sprint_2_kotlin.viewmodel.NewsItemDetailViewModel
+
+@Composable
+fun NewsItemDetailScreen(
+    newsItem: NewsItem,
+    viewModel: NewsItemDetailViewModel = viewModel()
+) {
+    LaunchedEffect(newsItem) {
+        viewModel.loadNewsItem(newsItem)
+    }
+
+    val currentItem by viewModel.newsItem.collectAsState()
+    val ratings by viewModel.ratings.collectAsState()
+
+    currentItem?.let { item ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp)
+        ) {
+            item {
+                // Image
+                Image(
+                    painter = rememberAsyncImagePainter(item.image_url),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Title
+                Text(
+                    text = item.title,
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Category and reliability
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Category ID: ${item.category_id}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    ReliabilityIndicator(item.average_reliability_score)
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Meta info
+                Text(
+                    text = "By ${item.author_type} at ${item.author_institution}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = "Published ${item.days_since} days ago • ${item.total_ratings} total ratings",
+                    style = MaterialTheme.typography.labelSmall
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Long description
+                Text(
+                    text = item.long_description.ifEmpty { item.short_description },
+                    style = MaterialTheme.typography.bodyMedium,
+                    lineHeight = 20.sp
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                if (item.original_source_url.isNotEmpty()) {
+                    Text(
+                        text = "Original source: ${item.original_source_url}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Ratings & Comments",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            // Ratings list
+            items(ratings) { rating ->
+                RatingItemCard(rating)
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            item { Spacer(modifier = Modifier.height(32.dp)) }
+        }
+    }
+}

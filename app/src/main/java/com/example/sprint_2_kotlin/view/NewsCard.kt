@@ -1,6 +1,7 @@
 package com.example.sprint_2_kotlin.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -11,9 +12,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.sprint_2_kotlin.model.data.NewsItem
 import com.example.sprint_2_kotlin.viewmodel.NewsFeedViewModel
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
@@ -49,7 +52,7 @@ fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                ReliabilityChip(item.average_reliability_score)
+                ReliabilityIndicator(item.average_reliability_score)
             }
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -83,17 +86,29 @@ fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
 }
 
 @Composable
-fun ReliabilityChip(score: Double) {
+fun ReliabilityIndicator(score: Double) {
+    val percentage = (score * 100).toInt()
+
     val color = when {
-        score >= 90 -> MaterialTheme.colorScheme.tertiary
-        score >= 70 -> MaterialTheme.colorScheme.secondary
-        else -> MaterialTheme.colorScheme.error
+        percentage >= 75 -> Color(0xFF4CAF50) // Green
+        percentage >= 50 -> Color(0xFFFFC107) // Yellow
+        else -> Color(0xFFF44336)             // Red
     }
-    AssistChip(
-        onClick = {},
-        label = {
-            Text("${score.toInt()}%")
-        },
-        colors = AssistChipDefaults.assistChipColors(containerColor = color)
-    )
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(color.copy(alpha = 0.2f))
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "$percentage%",
+            color = color,
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium
+            )
+        )
+    }
 }
