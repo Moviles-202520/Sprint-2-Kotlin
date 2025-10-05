@@ -1,6 +1,7 @@
 package com.example.sprint_2_kotlin.model.repository
 
 import com.example.sprint_2_kotlin.model.data.NewsItem
+import com.example.sprint_2_kotlin.model.data.RatingItem
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -60,6 +61,9 @@ class Repository {
         auth.signOut()
     }
 
+
+    //Funciones de fetch
+
     //retornar las primeras 20 filas
     suspend fun getNewsItems(pageSize: Int = 20, startRow: Int = 0): List<NewsItem> {
         val response = client.postgrest["news_items"].select {
@@ -68,4 +72,17 @@ class Repository {
         return response.decodeList()
     }
 
+    suspend fun getRatingsForNewsItem(newsItemId: Int): List<RatingItem> {
+        return try {
+            val response = client.postgrest["rating_items"].select {
+                filter {
+                    eq("news_item_id", newsItemId)
+                }
+            }
+            response.decodeList<RatingItem>()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
+    }
 }
