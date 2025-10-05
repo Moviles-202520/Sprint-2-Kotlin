@@ -2,6 +2,7 @@ package com.example.sprint_2_kotlin.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -19,15 +20,20 @@ import com.example.sprint_2_kotlin.viewmodel.NewsFeedViewModel
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
+fun NewsCard(
+    item: NewsItem,
+    viewModel: NewsFeedViewModel,
+    onClick: () -> Unit = {} // 👈 new param
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() } // 👈 make card clickable
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
-            // Image
             Image(
                 painter = rememberAsyncImagePainter(item.image_url),
                 contentDescription = null,
@@ -40,7 +46,6 @@ fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Category and reliability
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -57,13 +62,11 @@ fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // Title
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
 
-            // Short description
             Text(
                 text = item.short_description,
                 style = MaterialTheme.typography.bodySmall,
@@ -72,7 +75,6 @@ fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Author + days since + total ratings
             Text(
                 text = "${item.author_type} at ${item.author_institution}",
                 style = MaterialTheme.typography.labelSmall
@@ -84,6 +86,8 @@ fun NewsCard(item: NewsItem, viewModel: NewsFeedViewModel) {
         }
     }
 }
+
+
 
 @Composable
 fun ReliabilityIndicator(score: Double) {

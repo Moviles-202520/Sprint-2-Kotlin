@@ -31,14 +31,14 @@ class NewsItemDetailViewModel : ViewModel() {
                 // For now, use mock data for visualization
                 _ratings.value = listOf(
                     RatingItem(
-                        rating_itemId = 1,
+                        rating_item_id = 1,
                         news_item_id = newsItemId,
                         assigned_reliability_score = 0.85,
                         comment_text = "Solid reporting, clear sources.",
                         rating_date = "2025-09-29"
                     ),
                     RatingItem(
-                        rating_itemId = 2,
+                        rating_item_id = 2,
                         news_item_id = newsItemId,
                         assigned_reliability_score = 0.45,
                         comment_text = "Seems biased in interpretation.",
@@ -50,4 +50,18 @@ class NewsItemDetailViewModel : ViewModel() {
             }
         }
     }
+
+    /***private fun loadRatings(newsItemId: Int) {
+        viewModelScope.launch {
+            try {
+                val fetchedRatings = repository.getRatingsForNewsItem(newsItemId)
+                _ratings.value = fetchedRatings
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _ratings.value = emptyList()
+            }
+        }
+    }***/
+
 }
+
