@@ -58,6 +58,9 @@ dependencies {
     
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
 
+    //dependency for fingerprint sensor
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
