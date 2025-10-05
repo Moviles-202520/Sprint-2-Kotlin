@@ -3,8 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    kotlin("plugin.serialization") version "2.2.0"
-}
+    kotlin("plugin.serialization") version "2.2.0"}
 
 android {
     namespace = "com.example.sprint_2_kotlin"
@@ -53,6 +52,14 @@ dependencies {
 
     //dependency for managing timestamptz and Instant
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+
+    //dependency for coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
+
+    //dependency for fingerprint sensor
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
